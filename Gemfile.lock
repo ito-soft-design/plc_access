@@ -1,0 +1,30 @@
+PATH
+  remote: .
+  specs:
+    plc_access (0.1.0)
+      serialport (~> 1.3, >= 1.3.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    power_assert (2.0.1)
+    rake (12.3.3)
+    rr (3.1.0)
+    serialport (1.3.2)
+    test-unit (3.5.3)
+      power_assert
+    test-unit-rr (1.0.5)
+      rr (>= 1.1.1)
+      test-unit (>= 2.5.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  plc_access!
+  rake (~> 12.0)
+  test-unit
+  test-unit-rr
+
+BUNDLED WITH
+   2.1.4
