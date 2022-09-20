@@ -207,6 +207,4 @@ module PlcAccess
 
   end
 
-  class EscDevice < PlcDevice; end
-
 end

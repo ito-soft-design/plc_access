@@ -119,7 +119,7 @@ class TestOmronDevice < Test::Unit::TestCase
 
   def test_availability_for_t_device_as_bit
     assert_raise(RuntimeError) {
-      d = OmronDevice.new "t10.0"
+      OmronDevice.new "t10.0"
     }
   end
 
@@ -130,7 +130,7 @@ class TestOmronDevice < Test::Unit::TestCase
 
   def test_availability_for_c_device_as_bit
     assert_raise(RuntimeError) {
-      d = OmronDevice.new "c10.0"
+      OmronDevice.new "c10.0"
     }
   end
 

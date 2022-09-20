@@ -51,7 +51,6 @@ module Mitsubishi
       @station_no = 0
       @wait_time = 0
       @comm = nil
-      #prepare_device_map
     end
 
     def open
@@ -175,8 +174,6 @@ module Mitsubishi
       when String
         d = FxDevice.new name
         d.valid? ? d : nil
-      when EscDevice
-        local_device_of name
       else
         # it may be already QDevice
         name
@@ -245,60 +242,10 @@ module Mitsubishi
       body.upcase
     end
 
-
-=begin
-    def data_for_device device
-      a = data_for_int device.number
-      a[3] = device.suffix_code
-      a
-    end
-
-    def data_for_short value
-      [value].pack("v").unpack("C*")
-    end
-
-    def data_for_int value
-      [value].pack("V").unpack("C*")
-    end
-=end
-
     def dump_packet packet
       packet.inspect
     end
 
-=begin
-    def prepare_device_map
-      @conv_dev_dict ||= begin
-        h = {}
-        [
-          ["X", "X0", 1024],
-          ["Y", "Y0", 1024],
-          ["M", "M0", 1024],
-          ["C", "C0", 256],
-          ["T", "T0", 256],
-          ["L", "L0", 1024],
-          ["SC", "M1024", 1024],
-          ["D", "D0", 1024],
-          ["H", "D1024", 1024],
-          ["SD", "D2048", 1024],
-          ["PRG", "D3072", 1024]    # ..D4095
-        ].each do |s,d,c|
-          h[s] = [QDevice.new(d), c]
-        end
-        h
-      end
-    end
-=end
-
-=begin
-    def local_device_of device
-      return device if device.is_a? QDevice
-      d, c = @conv_dev_dict[device.suffix]
-      return nil unless device.number < c
-      ld = QDevice.new(d.suffix, d.number + device.number)
-      device_by_name ld.name
-    end
-=end
 
     private
 

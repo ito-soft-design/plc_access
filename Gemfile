@@ -8,4 +8,8 @@ group :test do
   gem "test-unit-rr"
 end
 
+group :development do
+  gem 'rubocop', require:false
+end
+
 gem "rake", "~> 12.0"

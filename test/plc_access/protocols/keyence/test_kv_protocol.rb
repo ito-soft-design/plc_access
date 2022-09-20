@@ -60,7 +60,6 @@ class TestKvProtocol < Test::Unit::TestCase
 
   def test_set_and_get_bit_as_array_with_range
     omit_if(!running)
-    d = KvDevice.new "MR0"
     bits = "10010001".each_char.map{|c| c == "1"}
     @protocol["MR0".."MR7"] = bits
     assert_equal bits, @protocol["MR0".."MR7"]

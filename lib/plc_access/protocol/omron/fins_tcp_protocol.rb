@@ -65,8 +65,6 @@ module Omron
       @ethernet_module = ETHERNET_ETN21
 
       @tcp_error_code = 0
-
-      prepare_device_map
     end
 
     def open
@@ -80,7 +78,7 @@ p e
       if @socket.nil?
         @socket = TCPSocket.open(@host, @port)
         if @socket
-          source_node = IOFINS_SOURCE_AUTO_NODE
+          self.source_node = IOFINS_SOURCE_AUTO_NODE
           query_node
         end
       end
@@ -164,7 +162,7 @@ p e
       end
 
       send_packet create_fins_frame(fins_header + command)
-      res = receive
+      receive
     end
 
     def set_words_to_device(words, device)
@@ -183,7 +181,7 @@ p e
       end
 
       send_packet create_fins_frame(fins_header + command)
-      res = receive
+      receive
     end
 
     def query_node
@@ -264,8 +262,6 @@ p e
       when String
         d = OmronDevice.new name
         d.valid? ? d : nil
-      when EscDevice
-        local_device_of name
       else
         # it may be already OmronDevice
         name
@@ -324,29 +320,6 @@ p e
       a.flatten
     end
 
-
-    # FIXME: It's dummy currently.
-    def prepare_device_map
-      @conv_dev_dict ||= begin
-        h = {}
-        [
-          ["X", "0.0", 1024],
-          ["Y", "400.0", 1024],
-          ["M", "M0.0", 1024],
-          ["C", "C0", 256],
-          ["T", "T0", 256],
-          ["L", "H0.0", 1024],
-          ["SC", "M400.0", 1024],
-          ["D", "D0", 1024],
-          ["H", "D1024", 1024],
-          ["SD", "D2048", 1024],
-          ["PRG", "D3072", 1024]    # ..D4095
-        ].each do |s,d,c|
-          h[s] = [OmronDevice.new(d), c]
-        end
-        h
-      end
-    end
 
     def int_to_a value, size
       a = []

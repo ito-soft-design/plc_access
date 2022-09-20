@@ -40,7 +40,6 @@ module Omron
       @baudrate = 38400
       @unit_no = 0
       @comm = nil
-      #prepare_device_map
     end
 
     def open
@@ -123,7 +122,7 @@ module Omron
             raise "Not matched FCS expected #{fcs.to_s(16).rjust(2,'0')}" unless fcs == res[-4,2].to_i(16)
             data = res[7..-5]
             terminated = true
-          else res[-1,1] == DELIMITER
+          elsif res[-1,1] == DELIMITER
             fcs = fcs_for(res[0..-4])
             raise "Not matched FCS expected #{fcs.to_s(16).rjust(2,'0')}" unless fcs == res[-3,2].to_i(16)
             data = res[7..-4]
@@ -149,8 +148,6 @@ module Omron
       when String
         d = OmronDevice.new name
         d.valid? ? d : nil
-      when EscDevice
-        local_device_of name
       else
         # it may be already OmronDevice
         name
@@ -203,7 +200,7 @@ module Omron
 
     def fcs_for packet
       fcs = packet.bytes.inject(0) do |a, b|
-        a = a ^ b
+        a ^ b
       end
       fcs = fcs & 0xff
       fcs

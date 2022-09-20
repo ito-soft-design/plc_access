@@ -56,27 +56,6 @@ class TestMcProtocol < Test::Unit::TestCase
     assert_equal values, @protocol.get_words_from_device(values.size, d)
   end
 
-  def test_convert_local_device_x0
-    d = EscDevice.new "X0"
-    ld = @protocol.device_by_name d
-    assert_equal QDevice, ld.class
-    assert_equal "X0", ld.name
-  end
-
-  def test_convert_local_device_prg0
-    d = EscDevice.new "PRG0"
-    ld = @protocol.device_by_name d
-    assert_equal QDevice, ld.class
-    assert_equal "D3072", ld.name
-  end
-
-  def test_convert_local_device_sd0
-    d = EscDevice.new "SD0"
-    ld = @protocol.device_by_name d
-    assert_equal QDevice, ld.class
-    assert_equal "D2048", ld.name
-  end
-
   # array attr_accessor
   def test_set_and_get_bit_as_array
     omit_if(!running)
@@ -88,7 +67,6 @@ class TestMcProtocol < Test::Unit::TestCase
 
   def test_set_and_get_bit_as_array_with_range
     omit_if(!running)
-    d = QDevice.new "M0"
     bits = "10010001".each_char.map{|c| c == "1"}
     @protocol["M0".."M7"] = bits
     assert_equal bits, @protocol["M0".."M7"]
@@ -96,7 +74,6 @@ class TestMcProtocol < Test::Unit::TestCase
 
   def test_set_and_get_bit_as_array_with_one
     omit_if(!running)
-    d = QDevice.new "M0"
     bits = "10010001".each_char.map{|c| c == "1"}
     @protocol["M0"] = true
     assert_equal true, @protocol["M0"]
