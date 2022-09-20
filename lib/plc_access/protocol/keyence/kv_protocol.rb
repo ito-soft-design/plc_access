@@ -22,165 +22,158 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 module PlcAccess
-module Protocol
-module Keyence
-
-  class KvProtocol < Protocol
-
-    def initialize options={}
-      super
-      @socket = nil
-      @host = options[:host] || "192.168.0.10"
-      @port = options[:port] || 8501
-    end
-
-    def open
-      open!
-    rescue
-      nil
-    end
-
-    def open!
-      @socket ||= TCPSocket.open(@host, @port)
-    end
-
-    def close
-      @socket.close if @socket
-      @socket = nil
-    end
-
-    def get_bits_from_device count, device
-      c = (count + 15) / 16
-      words = get_words_from_device c, device
-      values = []
-      count.times do |i|
-        index = i / 16
-        bit = i % 16
-        values << ((words[index] & (1 << bit)) != 0)
-      end
-      values
-    end
-
-    def set_bits_to_device bits, device
-      device = device_by_name device
-      bits = [bits] unless bits.is_a? Array
-      @logger.debug("#{device.name}[#{bits.size}] <= #{bits}")
-      bits.each do |v|
-        cmd = "ST"
-        case v
-        when false, 0
-          cmd = "RS"
+  module Protocol
+    module Keyence
+      class KvProtocol < Protocol
+        def initialize(options = {})
+          super
+          @socket = nil
+          @host = options[:host] || '192.168.0.10'
+          @port = options[:port] || 8501
         end
-        packet = "#{cmd} #{device.name}\r\n"
-        @logger.debug("> #{dump_packet packet}")
-        open
-        @socket.puts(packet)
-        res = receive
-        raise res unless /OK/i =~ res
-        device += 1
-      end
-    end
-    alias :set_bit_to_device :set_bits_to_device
 
-
-    def get_words_from_device(count, device)
-      packet = "RDS #{device.name}.H #{count}\r\n"
-      @logger.debug("> #{dump_packet packet}")
-      open
-      @socket.puts(packet)
-      res = receive
-      values = res.split(/\s+/).map{|v| v.to_i(16)}
-      @logger.debug("#{device.name}[#{count}] => #{values}")
-      values
-    end
-
-    def set_words_to_device words, device
-      words = [words] unless words.is_a? Array
-      packet = "WRS #{device.name}.H #{words.size} #{words.map{|w| w.to_s(16)}.join(" ")}\r\n"
-      @logger.debug("> #{dump_packet packet}")
-      open
-      @socket.puts(packet)
-      res = receive
-      @logger.debug("#{device.name}[#{words.size}] <= #{words}")
-      raise res unless /OK/i =~ res
-    end
-    alias :set_word_to_device :set_words_to_device
-
-
-    def device_by_name name
-      case name
-      when String
-        device_class.new name
-      else
-        # it may be already Device
-        name
-      end
-    end
-
-
-    def receive
-      res = ""
-      begin
-        Timeout.timeout(TIMEOUT) do
-          res = @socket.gets
+        def open
+          open!
+        rescue StandardError
+          nil
         end
-      rescue Timeout::Error
+
+        def open!
+          @socket ||= TCPSocket.open(@host, @port)
+        end
+
+        def close
+          @socket.close if @socket
+          @socket = nil
+        end
+
+        def get_bits_from_device(count, device)
+          c = (count + 15) / 16
+          words = get_words_from_device c, device
+          values = []
+          count.times do |i|
+            index = i / 16
+            bit = i % 16
+            values << ((words[index] & (1 << bit)) != 0)
+          end
+          values
+        end
+
+        def set_bits_to_device(bits, device)
+          device = device_by_name device
+          bits = [bits] unless bits.is_a? Array
+          @logger.debug("#{device.name}[#{bits.size}] <= #{bits}")
+          bits.each do |v|
+            cmd = 'ST'
+            case v
+            when false, 0
+              cmd = 'RS'
+            end
+            packet = "#{cmd} #{device.name}\r\n"
+            @logger.debug("> #{dump_packet packet}")
+            open
+            @socket.puts(packet)
+            res = receive
+            raise res unless /OK/i =~ res
+
+            device += 1
+          end
+        end
+        alias set_bit_to_device set_bits_to_device
+
+        def get_words_from_device(count, device)
+          packet = "RDS #{device.name}.H #{count}\r\n"
+          @logger.debug("> #{dump_packet packet}")
+          open
+          @socket.puts(packet)
+          res = receive
+          values = res.split(/\s+/).map { |v| v.to_i(16) }
+          @logger.debug("#{device.name}[#{count}] => #{values}")
+          values
+        end
+
+        def set_words_to_device(words, device)
+          words = [words] unless words.is_a? Array
+          packet = "WRS #{device.name}.H #{words.size} #{words.map { |w| w.to_s(16) }.join(' ')}\r\n"
+          @logger.debug("> #{dump_packet packet}")
+          open
+          @socket.puts(packet)
+          res = receive
+          @logger.debug("#{device.name}[#{words.size}] <= #{words}")
+          raise res unless /OK/i =~ res
+        end
+        alias set_word_to_device set_words_to_device
+
+        def device_by_name(name)
+          case name
+          when String
+            device_class.new name
+          else
+            # it may be already Device
+            name
+          end
+        end
+
+        def receive
+          res = ''
+          begin
+            Timeout.timeout(TIMEOUT) do
+              res = @socket.gets
+            end
+          rescue Timeout::Error
+          end
+          @logger.debug("< #{dump_packet res}")
+          res.chomp
+        end
+
+        def dump_packet(packet)
+          packet.dup.chomp
+        end
+
+        def available_bits_range(suffix = nil)
+          case suffix
+          when 'TM'
+            1..512
+          when 'Z'
+            1..12
+          when 'T', 'TC', 'TS', 'C', 'CC', 'CS'
+            1..120
+          when 'CTH'
+            1..2
+          when 'CTC'
+            1..4
+          when 'AT'
+            1..8
+          else
+            1..1000
+          end
+        end
+
+        def available_words_range(suffix = nil)
+          case suffix
+          when 'TM'
+            1..256
+          when 'Z'
+            1..12
+          when 'T', 'TC', 'TS', 'C', 'CC', 'CS'
+            1..120
+          when 'CTH'
+            1..2
+          when 'CTC'
+            1..4
+          when 'AT'
+            1..8
+          else
+            1..500
+          end
+        end
+
+        private
+
+        def device_class
+          KvDevice
+        end
       end
-      @logger.debug("< #{dump_packet res}")
-      res.chomp
     end
-
-    def dump_packet packet
-      packet.dup.chomp
-    end
-
-    def available_bits_range suffix=nil
-      case suffix
-      when "TM"
-        1..512
-      when "Z"
-        1..12
-      when "T", "TC", "TS", "C", "CC", "CS"
-        1..120
-      when "CTH"
-        1..2
-      when "CTC"
-        1..4
-      when "AT"
-        1..8
-      else
-        1..1000
-      end
-    end
-
-    def available_words_range suffix=nil
-      case suffix
-      when "TM"
-        1..256
-      when "Z"
-        1..12
-      when "T", "TC", "TS", "C", "CC", "CS"
-        1..120
-      when "CTH"
-        1..2
-      when "CTC"
-        1..4
-      when "AT"
-        1..8
-      else
-        1..500
-      end
-    end
-
-
-    private
-
-      def device_class
-        KvDevice
-      end
-
   end
-
-end
-end
 end

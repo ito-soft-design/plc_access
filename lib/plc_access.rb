@@ -21,8 +21,8 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-dir = File.expand_path(File.dirname(__FILE__))
+dir = __dir__
 $:.unshift dir unless $:.include? dir
 
-require "plc_access/protocol/protocol"
-require "plc_access/version"
+require 'plc_access/protocol/protocol'
+require 'plc_access/version'

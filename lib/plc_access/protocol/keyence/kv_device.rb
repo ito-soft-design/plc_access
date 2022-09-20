@@ -22,38 +22,45 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 module PlcAccess
-module Protocol
-module Keyence
+  module Protocol
+    module Keyence
+      class KvDevice < PlcDevice
+        def initialize(a, b = nil)
+          super
+          @suffix = 'R' if @suffix.nil? || @suffix.length == 0
+        end
 
-  class KvDevice < PlcDevice
+        def +(other)
+          self.class.new suffix, number + other
+        end
 
-    def initialize a, b = nil
-      super
-      @suffix = "R" if @suffix.nil? || @suffix.length == 0
+        def -(other)
+          self.class.new suffix, [number - other, 0].max
+        end
+
+        private
+
+        SUFFIXES_FOR_DEC      = %w[DM EM FM ZF TM Z T TC TS C CC CS CTH CTC AT CM VM]
+        SUFFIXES_FOR_DEC_HEX  = %w[R MR LR CR]
+        SUFFIXES_FOR_HEX      = %w[B VB W]
+        SUFFIXES_FOR_BIT      = %w[R B MR LR CR VB]
+
+        def suffixes_for_dec
+          SUFFIXES_FOR_DEC
+        end
+
+        def suffixes_for_dec_hex
+          SUFFIXES_FOR_DEC_HEX
+        end
+
+        def suffixes_for_hex
+          SUFFIXES_FOR_HEX
+        end
+
+        def suffixes_for_bit
+          SUFFIXES_FOR_BIT
+        end
+      end
     end
-
-    def + value
-      self.class.new self.suffix, self.number + value
-    end
-
-    def - value
-      self.class.new self.suffix, [self.number - value, 0].max
-    end
-
-    private
-
-      SUFFIXES_FOR_DEC      = %w(DM EM FM ZF TM Z T TC TS C CC CS CTH CTC AT CM VM)
-      SUFFIXES_FOR_DEC_HEX  = %w(R MR LR CR)
-      SUFFIXES_FOR_HEX      = %w(B VB W)
-      SUFFIXES_FOR_BIT      = %w(R B MR LR CR VB)
-
-      def suffixes_for_dec; SUFFIXES_FOR_DEC; end
-      def suffixes_for_dec_hex; SUFFIXES_FOR_DEC_HEX; end
-      def suffixes_for_hex; SUFFIXES_FOR_HEX; end
-      def suffixes_for_bit; SUFFIXES_FOR_BIT; end
-
   end
-
-end
-end
 end
