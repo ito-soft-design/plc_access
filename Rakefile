@@ -1,8 +1,5 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
-require 'fileutils'
-
-include FileUtils
 
 task default: [:test]
 
