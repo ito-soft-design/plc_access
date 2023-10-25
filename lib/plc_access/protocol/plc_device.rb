@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2016 ITO SOFT DESIGN Inc.
@@ -30,7 +32,7 @@ module PlcAccess
     NUMBER_TYPE_DEC_HEX = 1
     NUMBER_TYPE_HEX     = 2
 
-    ESC_SUFFIXES = %w[X Y M - C T L SC CC TC D - CS TS H SD]
+    ESC_SUFFIXES = %w[X Y M - C T L SC CC TC D - CS TS H SD].freeze
 
     class << self
       def status_to_plc_device
@@ -82,13 +84,13 @@ module PlcAccess
         a = [@number / 16, @number % 16]
         ns = begin
           s = a.last.to_s.rjust(2, '0')
-          s = a.first.to_s + s unless a.first == 0
+          s = a.first.to_s + s unless a.first.zero?
           s
         end
         "#{@suffix}#{ns}"
       when NUMBER_TYPE_HEX
         ns = @number.to_s(16).upcase
-        ns = '0' + ns unless /^[0-9]/ =~ ns
+        ns = "0#{ns}" unless /^[0-9]/ =~ ns
         "#{@suffix}#{ns}"
       end
     end
@@ -182,11 +184,11 @@ module PlcAccess
 
     private
 
-    SUFFIXES_FOR_DEC      = %w[PRG M C T L SC CC TC D CS TS H SD]
-    SUFFIXES_FOR_DEC_HEX  = %w[]
-    SUFFIXES_FOR_HEX      = %w[X Y]
-    SUFFIXES_FOR_BIT      = %w[X Y M C T L SC]
-    SUFFIXES_FOR_INPUT    = %w[X]
+    SUFFIXES_FOR_DEC      = %w[PRG M C T L SC CC TC D CS TS H SD].freeze
+    SUFFIXES_FOR_DEC_HEX  = %w[].freeze
+    SUFFIXES_FOR_HEX      = %w[X Y].freeze
+    SUFFIXES_FOR_BIT      = %w[X Y M C T L SC].freeze
+    SUFFIXES_FOR_INPUT    = %w[X].freeze
 
     def suffixes_for_dec
       SUFFIXES_FOR_DEC

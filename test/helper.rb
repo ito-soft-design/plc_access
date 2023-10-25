@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 d = File.join(root, 'lib')
-$:.unshift d unless $:.include? d
+$LOAD_PATH.unshift d unless $LOAD_PATH.include? d
 d = File.join(root, 'plc')
-$:.unshift d unless $:.include? d
+$LOAD_PATH.unshift d unless $LOAD_PATH.include? d

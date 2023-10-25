@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2016 ITO SOFT DESIGN Inc.
@@ -40,7 +42,7 @@ module PlcAccess
 
         def initialize(options = {})
           super
-          @port = options[:port] || `ls /dev/tty.usb*`.split("\n").map { |l| l.chomp }.first
+          @port = options[:port] || `ls /dev/tty.usb*`.split("\n").map(&:chomp).first
           @pc_no = 0xff
           @baudrate = 19_200
           @station_no = 0
@@ -62,6 +64,7 @@ module PlcAccess
             @comm ||= SerialPort.new(@port, @baudrate, 7, 1, 2).tap do |s|
               s.read_timeout = (TIMEOUT * 1000.0).to_i
             end
+            raise StandardError.new("invalid port #{@port}") unless @comm
           rescue StandardError => e
             p e
             nil
@@ -69,7 +72,7 @@ module PlcAccess
         end
 
         def close
-          @comm.close if @comm
+          @comm&.close
           @comm = nil
         end
 
@@ -246,7 +249,7 @@ module PlcAccess
         private
 
         def check_sum(packet)
-          packet[1..-1].upcase.unpack('C*').inject(0) { |s, c| s + c }.to_s(16).rjust(2, '0')[-2, 2].upcase
+          packet[1..].upcase.unpack('C*').inject(0) { |s, c| s + c }.to_s(16).rjust(2, '0')[-2, 2].upcase
         end
 
         def header_with_command(command)

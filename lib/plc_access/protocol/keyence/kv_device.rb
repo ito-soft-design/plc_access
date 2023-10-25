@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2016 ITO SOFT DESIGN Inc.
@@ -27,7 +29,7 @@ module PlcAccess
       class KvDevice < PlcDevice
         def initialize(a, b = nil)
           super
-          @suffix = 'R' if @suffix.nil? || @suffix.length == 0
+          @suffix = 'R' if @suffix.nil? || @suffix.length.zero?
         end
 
         def +(other)
@@ -40,10 +42,10 @@ module PlcAccess
 
         private
 
-        SUFFIXES_FOR_DEC      = %w[DM EM FM ZF TM Z T TC TS C CC CS CTH CTC AT CM VM]
-        SUFFIXES_FOR_DEC_HEX  = %w[R MR LR CR]
-        SUFFIXES_FOR_HEX      = %w[B VB W]
-        SUFFIXES_FOR_BIT      = %w[R B MR LR CR VB]
+        SUFFIXES_FOR_DEC      = %w[DM EM FM ZF TM Z T TC TS C CC CS CTH CTC AT CM VM].freeze
+        SUFFIXES_FOR_DEC_HEX  = %w[R MR LR CR].freeze
+        SUFFIXES_FOR_HEX      = %w[B VB W].freeze
+        SUFFIXES_FOR_BIT      = %w[R B MR LR CR VB].freeze
 
         def suffixes_for_dec
           SUFFIXES_FOR_DEC

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2016 ITO SOFT DESIGN Inc.
@@ -43,7 +45,7 @@ module PlcAccess
         end
 
         def close
-          @socket.close if @socket
+          @socket&.close
           @socket = nil
         end
 
@@ -63,7 +65,7 @@ module PlcAccess
 
           # error checking
           end_code = res[9, 2].pack('C*').unpack1('v')
-          unless end_code == 0
+          unless end_code.zero?
             error = res[11, 2].pack('C*').unpack1('v')
             raise "return end code 0x#{end_code.to_s(16)} error code 0x#{error.to_s(16)} for get_bits_from_device(#{count}, #{device.name})"
           end
@@ -99,7 +101,7 @@ module PlcAccess
 
           # error checking
           end_code = res[9, 2].pack('C*').unpack1('v')
-          unless end_code == 0
+          unless end_code.zero?
             error = res[11, 2].pack('C*').unpack1('v')
             raise "return end code 0x#{end_code.to_s(16)} error code 0x#{error.to_s(16)} for set_bits_to_device(#{bits}, #{device.name})"
           end
@@ -121,7 +123,7 @@ module PlcAccess
 
           # error checking
           end_code = res[9, 2].pack('C*').unpack1('v')
-          unless end_code == 0
+          unless end_code.zero?
             error = res[11, 2].pack('C*').unpack1('v')
             raise "return end code 0x#{end_code.to_s(16)} error code 0x#{error.to_s(16)} for get_words_from_device(#{count}, #{device.name})"
           end
@@ -152,7 +154,7 @@ module PlcAccess
 
           # error checking
           end_code = res[9, 2].pack('C*').unpack1('v')
-          unless end_code == 0
+          unless end_code.zero?
             error = res[11, 2].pack('C*').unpack1('v')
             raise "return end code 0x#{end_code.to_s(16)} error code 0x#{error.to_s(16)} for set_words_to_device(#{words}, #{device.name})"
           end
@@ -269,9 +271,9 @@ module PlcAccess
           len = packet.length
           bytes = packet.dup
           len.times do |i|
-            a << ('0' + bytes[i].to_s(16))[-2, 2]
+            a << "0#{bytes[i].to_s(16)}"[-2, 2]
           end
-          '[' + a.join(', ') + ']'
+          "[#{a.join(', ')}]"
         end
       end
     end

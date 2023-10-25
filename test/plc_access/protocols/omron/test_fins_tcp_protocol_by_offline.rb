@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test/unit/rr'
 
 class TestFinsTcpProtocolOnOffline < Test::Unit::TestCase
@@ -6,7 +8,7 @@ class TestFinsTcpProtocolOnOffline < Test::Unit::TestCase
   def setup
     @protocol = FinsTcpProtocol.new host: 'localhost', log_level: :debug
     Timeout.timeout(0.5) do
-      @running = !!@protocol.open
+      @running = !@protocol.open.nil?
     end
   rescue Timeout::Error
   end

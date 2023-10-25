@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2016 ITO SOFT DESIGN Inc.
@@ -43,7 +45,7 @@ module PlcAccess
         end
 
         def close
-          @socket.close if @socket
+          @socket&.close
           @socket = nil
         end
 

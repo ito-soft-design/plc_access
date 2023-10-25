@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2016 ITO SOFT DESIGN Inc.
@@ -22,7 +24,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 dir = __dir__
-$:.unshift dir unless $:.include? dir
+$LOAD_PATH.unshift dir unless $LOAD_PATH.include? dir
 
 module PlcAccess
   module Protocol
@@ -30,7 +32,7 @@ module PlcAccess
       attr_accessor :host, :port
 
       def initialize(options = {})
-        @logger = Logger.new(STDOUT)
+        @logger = Logger.new($stdout)
         self.log_level = options[:log_level] || :info
       end
 
@@ -134,27 +136,25 @@ module PlcAccess
           # protocol["DM0", 10]
           d = device_by_name args[0]
           c = args[1]
+          a = []
           if d.bit_device?
-            a = []
             b = available_bits_range(d).last
-            until c == 0
+            until c.zero?
               n_c = [b, c].min
               a += get_bits_from_device(n_c, d)
               d += n_c
               c -= n_c
             end
-            a
           else
-            a = []
             b = available_words_range(d).last
-            until c == 0
+            until c.zero?
               n_c = [b, c].min
               a += get_words_from_device(n_c, d)
               d += n_c
               c -= n_c
             end
-            a
           end
+          a
         else
           raise ArgumentError, "wrong number of arguments (given #{args.size}, expected 1 or 2)"
         end
@@ -183,21 +183,19 @@ module PlcAccess
           values = [values] unless values.is_a? Array
           raise ArgumentError, "Count #{c} is not match #{args[2].size}." unless c == values.size
 
+          a = []
           if d.bit_device?
-            a = []
             values.each_slice(available_bits_range(d).last) do |sv|
               set_bits_to_device(sv, d)
               d += sv.size
             end
-            a
           else
-            a = []
             values.each_slice(available_words_range(d).last) do |sv|
               set_words_to_device(sv, d)
               d += sv.size
             end
-            a
           end
+          a
         else
           raise ArgumentError, "wrong number of arguments (given #{args.size}, expected 2 or 3)"
         end

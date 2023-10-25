@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test/unit'
 require 'plc_access'
 
@@ -9,9 +11,9 @@ class TestMcProtocol < Test::Unit::TestCase
   attr_reader :running
 
   def setup
-    @protocol = McProtocol.new host: '10.0.1.201', port: 5010, log_level: :debug
+    @protocol = McProtocol.new host: '10.0.1.202', port: 5010, log_level: :debug
     Timeout.timeout(0.5) do
-      @running = !!@protocol.open
+      @running = !@protocol.open.nil?
     end
   rescue Timeout::Error
   end

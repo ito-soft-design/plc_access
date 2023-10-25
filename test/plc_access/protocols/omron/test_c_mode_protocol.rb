@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test/unit/rr'
 
 class TestCModeProtocol < Test::Unit::TestCase
@@ -8,7 +10,7 @@ class TestCModeProtocol < Test::Unit::TestCase
   def setup
     @protocol = CModeProtocol.new log_level: :debug
     Timeout.timeout(0.5) do
-      @running = !!@protocol.open
+      @running = !@protocol.open.nil?
     end
   rescue Timeout::Error
   end

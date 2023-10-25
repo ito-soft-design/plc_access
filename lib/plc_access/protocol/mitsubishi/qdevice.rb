@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2016 ITO SOFT DESIGN Inc.
@@ -27,9 +29,9 @@ module PlcAccess
       class QDevice < PlcDevice
         attr_reader :suffix, :number
 
-        SUFFIXES = %w[SM SD X Y M L F V B D W TS TC TN SS SC SN CS CC CN SB SW S DX DY Z R ZR]
+        SUFFIXES = %w[SM SD X Y M L F V B D W TS TC TN SS SC SN CS CC CN SB SW S DX DY Z R ZR].freeze
         SUFFIX_CODES = [0x91, 0xa9, 0x9c, 0x9d, 0x90, 0x92, 0x93, 0x94, 0xa0, 0xa8, 0xb4, 0xc1, 0xc0, 0xc2, 0xc7, 0xc6,
-                        0xc8, 0xc4, 0xc3, 0xc5, 0xa1, 0xb5, 0x98, 0xa2, 0xa3, 0xcc, 0xaf, 0xb0]
+                        0xc8, 0xc4, 0xc3, 0xc5, 0xa1, 0xb5, 0x98, 0xa2, 0xa3, 0xcc, 0xaf, 0xb0].freeze
 
         def initialize(a, b = nil)
           case a

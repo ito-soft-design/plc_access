@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2019 ITO SOFT DESIGN Inc.
@@ -75,7 +77,7 @@ module PlcAccess
         end
 
         def close
-          @socket.close if @socket
+          @socket&.close
           @socket = nil
         end
 
@@ -114,7 +116,7 @@ module PlcAccess
           res = receive
 
           count.times.each_with_object([]) do |i, a|
-            a << (!(res[16 + 10 + 4 + i] == 0))
+            a << (res[16 + 10 + 4 + i] != 0)
           end
         end
 
@@ -218,7 +220,7 @@ module PlcAccess
                 break
               end
             end
-            raise "Response error code: #{res[15]}" unless res[15] == 0
+            raise "Response error code: #{res[15]}" unless (res[15]).zero?
 
             res
           end

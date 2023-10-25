@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2019 ITO SOFT DESIGN Inc.
@@ -33,7 +35,7 @@ module PlcAccess
 
         def initialize(options = {})
           super
-          @port = options[:port] || `ls /dev/tty.usb*`.split("\n").map { |l| l.chomp }.first
+          @port = options[:port] || `ls /dev/tty.usb*`.split("\n").map(&:chomp).first
           @baudrate = 38_400
           @unit_no = 0
           @comm = nil
@@ -60,7 +62,7 @@ module PlcAccess
         end
 
         def close
-          @comm.close if @comm
+          @comm&.close
           @comm = nil
         end
 
@@ -114,7 +116,7 @@ module PlcAccess
             data = ''
             if res
               ec = error_code(res)
-              raise "Error response: #{ec.to_i(16).rjust(2, '0')}" unless ec == 0
+              raise "Error response: #{ec.to_i(16).rjust(2, '0')}" unless ec.zero?
 
               if res[-2, 2] == TERMINATOR
                 fcs = fcs_for(res[0..-5])

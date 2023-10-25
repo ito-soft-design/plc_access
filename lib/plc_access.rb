@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2016 ITO SOFT DESIGN Inc.
@@ -22,7 +24,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 dir = __dir__
-$:.unshift dir unless $:.include? dir
+$LOAD_PATH.unshift dir unless $LOAD_PATH.include? dir
 
 require 'plc_access/protocol/protocol'
 require 'plc_access/version'

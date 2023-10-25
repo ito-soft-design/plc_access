@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2019 ITO SOFT DESIGN Inc.
@@ -29,7 +31,7 @@ module PlcAccess
       class OmronDevice < PlcDevice
         attr_reader :suffix, :channel, :bit
 
-        SUFFIXES = %w[M H D T C A]
+        SUFFIXES = %w[M H D T C A].freeze
 
         def initialize(a, b = nil, c = nil)
           case a
