@@ -16,8 +16,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'serialport', '~> 1.3', '>= 1.3.1'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
 
-  spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
-
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = 'https://github.com/ito-soft-design/plc_access'
   spec.metadata['changelog_uri'] = 'https://github.com/ito-soft-design/plc_access/CHANGES.md'
