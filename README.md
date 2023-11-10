@@ -33,9 +33,9 @@ plc["M0"]         # => true
 plc["M0", 10]     # => [true, false, ..., false]
 
 plc["D0"] = 123
-plc["D0"]       # => 123
+plc["D0"]         # => 123
 plc["D0", 10] = [0, 1, 2, ..., 9]
-plc["D0".."D9"]   => [0, 1, 2, ..., 9]
+plc["D0".."D9"]   # => [0, 1, 2, ..., 9]
 ```
 
 Keyence PLCs:
@@ -50,9 +50,9 @@ plc["MR0"]         # => true
 plc["MR0", 10]     # => [true, false, ..., false]
 
 plc["DM0"] = 123
-plc["DM0"]       # => 123
+plc["DM0"]         # => 123
 plc["DM0", 10] = [0, 1, 2, ..., 9]
-plc["DM0".."DM9"]   => [0, 1, 2, ..., 9]
+plc["DM0".."DM9"]  # => [0, 1, 2, ..., 9]
 ```
 
 ## Contributing
