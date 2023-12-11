@@ -1,7 +1,7 @@
 require 'test/unit'
 require 'plc_access'
 
-using PlcAccess::ArrayActAsType
+using PlcAccess::ActAsType
 
 class TestArrayActAsType < Test::Unit::TestCase
 

@@ -28,5 +28,4 @@ $LOAD_PATH.unshift dir unless $LOAD_PATH.include? dir
 
 require 'plc_access/protocol/protocol'
 require 'plc_access/version'
-require 'plc_access/array_act_as_type'
-require 'plc_access/string_act_as_type'
+require 'plc_access/act_as_type'

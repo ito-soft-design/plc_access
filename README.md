@@ -58,10 +58,10 @@ plc["DM0".."DM9"]  # => [0, 1, 2, ..., 9]
 ### Types
 
 If you want to read or write the value as a specified type, use to_ushort, to_short, to_uint, to_int, and to_float for reading and as_ushort, as_short, as_uint, as_int, and as_float for writing.   
-And don't forget to put the line ```using PlcAccess::ArrayActAsType``` before using it.
+And don't forget to put the line ```using PlcAccess::ActAsType``` before using it.
 
 ```
-using PlcAccess::ArrayActAsType
+using PlcAccess::ActAsType
 
 # [0, 1, 2, 3, 4] is treated as five int elements.
 # #as_int converts int to two ushort elements. So it gets the total as ten ushort elements.
