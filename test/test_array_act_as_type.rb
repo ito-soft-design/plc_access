@@ -9,11 +9,11 @@ class TestArrayActAsType < Test::Unit::TestCase
     @a = [1, 0, -1, 0, 1, 1, -1, -1]
   end
 
-  def test_to_usort
+  def test_to_ushort
     assert_equal [1, 0, 65535, 0, 1, 1, 65535, 65535], @a.to_ushort
   end
 
-  def test_to_sort
+  def test_to_short
     assert_equal [1, 0, -1, 0, 1, 1, -1, -1], @a.to_short
   end
 
