@@ -42,6 +42,14 @@ module ArrayActAsType
       pack("f*").unpack("S*")
     end
 
+    def as_string length=nil, encoding=Encoding::UTF_8
+      s = pack("v*")
+      if length
+        s = s[0, length].delete("\000")
+      end
+      s.force_encoding(encoding).encode(Encoding::UTF_8)
+    end
+  
   end
 end
 end

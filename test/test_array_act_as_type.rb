@@ -5,8 +5,6 @@ using PlcAccess::ArrayActAsType
 
 class TestArrayActAsType < Test::Unit::TestCase
 
-  attr_reader :running
-
   def setup
     @a = [1, 0, -1, 0, 1, 1, -1, -1]
   end
@@ -47,7 +45,7 @@ class TestArrayActAsType < Test::Unit::TestCase
     assert_equal @a.as_ushort, [1, 65535, 0x10001, -1].as_int
   end
 
-  def test_as_int
+  def test_as_float
     assert_equal @a[0..-3].as_ushort, [1.401298464324817e-45, 9.183409485952689e-41, 9.183689745645554e-41].as_float
   end
 

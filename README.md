@@ -72,6 +72,12 @@ plc["DM0", 10] = [0, 1, 2, 3, 4].as_int  # => [0, 0, 1, 0, 2, 0, 3, 0, 4, 0]
 # #to_int converts two ushort values to one int value. So it gets the total as five int elements.
 
 plc["MR0", 10].to_int # => [0, 1, 2, 3, 4]
+
+# Set string to data memory (ten wors from DM0) as ushort values.
+plc["DM0", 10] = "PLC Access".as_ushort()
+# Get string from data memory (ten wors from DM0).
+plc["DM0", 10].to_string()
+
 ```
 
 ## Contributing
