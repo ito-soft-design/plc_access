@@ -43,7 +43,7 @@ module ActAsType
       pack("f*").unpack("S*")
     end
 
-    def as_string length=nil, encoding=Encoding::UTF_8
+    def to_string length=nil, encoding=Encoding::UTF_8
       s = pack("v*")
       if length
         s = s[0, length].delete("\000")
@@ -55,7 +55,7 @@ module ActAsType
 
   refine String do
 
-    def to_ushort length=nil, encoding=Encoding::UTF_8
+    def as_ushort length=nil, encoding=Encoding::UTF_8
       a = self.encode(encoding).unpack("v*")
       return a unless length
       
