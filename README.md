@@ -80,6 +80,74 @@ plc["DM0", 10].to_string()
 
 ```
 
+## Supported PLCs
+
+### Keyence
+
+It supports Keyence PLCs with an Ethernet connection.
+
+```
+plc = PlcAccess::Protocol::Keyence::KvProtocol.new host: '192.168.0.10', port: 8501
+```
+
+### Mitsubishi
+
+It supports Mitsubishi PLCs with an Ethernet connection.
+
+```
+plc = PlcAccess::Protocol::Mitsubishi::McProtocol.new host: '192.168.0.10', port: 5010
+```
+
+It supports Mitsubishi Fx PLCs with a Serial connection.
+
+```
+plc = PlcAccess::Protocol::Mitsubishi::FxProtocol.new port: /dev/tty.usbxxxxx'
+```
+
+PLC configuration:
+- baudrate: 19200
+- bit: 7
+- parity: Odd
+- stop bit: 1
+
+![](images/fx_comm_setting.png)
+
+### Omron
+
+It supports Omron PLCs with an Ethernet connection.
+
+```
+plc = PlcAccess::Protocol::Omron::FinsTcpProtocol.new host: '192.168.0.10', port: 9600
+```
+
+It supports Omron PLCs with a C Mode serial connection.
+
+```
+plc = PlcAccess::Protocol::Omron::CModeProtocol.new port: /dev/tty.usbxxxxx'
+```
+
+### Plc Share
+
+Plc Share is a protocol conversion application. It runs on Windows and connects to various PLCs using a serial or Ethernet connection. You can then connect with the Plc Share Protocol, which extends Keyence’s protocol. You can specify a target PLC’s device.
+
+[Plc Share](http://iphone.itosoft.com/plcshare)
+
+![](images/plc_share.png)
+
+```
+plc = PlcAccess::Protocol::PlcShare::PlcShareProtocol.new host: '192.168.0.10', port: 10000, device_type: :fx
+```
+
+You can choose a target PLC by using the device type option.
+
+|device_type|Target PLCs|
+|:-:|:--|
+|:kv|Keyence PLCs|
+|:fx|Mitsubishi Fx PLCs|
+|:q|Mitsubishi Q/L/R PLCs|
+|:omron|Omron PLCs|
+
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/ito-soft-design/plc_access. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/ito-soft-design/plc_access/blob/master/CODE_OF_CONDUCT.md).
