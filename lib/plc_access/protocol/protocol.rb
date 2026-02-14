@@ -173,7 +173,7 @@ module PlcAccess
           v = [v] unless v.is_a? Array
           case args[0]
           when String
-            self[args[0], 1] = v
+            self[args[0], v.size] = v
           when Range
             self[args[0].first, args[0].count] = v
           else
@@ -185,7 +185,8 @@ module PlcAccess
           c = args[1]
           values = args[2]
           values = [values] unless values.is_a? Array
-          raise ArgumentError, "Count #{c} is not match #{args[2].size}." unless c == values.size
+          values += [0] * (c - values.size) if values.size < c
+          values = values[0, c] if values.size > c
 
           a = []
           if d.bit_device?
