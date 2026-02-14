@@ -46,6 +46,15 @@ module PlcAccess
           @device_type = type
         end
 
+        def string_endian
+          case @device_type
+          when :fx, :q
+            :little
+          else
+            :big
+          end
+        end
+
         private
 
         def device_class

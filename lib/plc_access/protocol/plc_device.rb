@@ -147,6 +147,10 @@ module PlcAccess
     alias word value
     alias word= value=
 
+    def string_endian
+      :big
+    end
+
     def text(len = 8)
       n = (len + 1) / 2
       d = self
@@ -155,14 +159,16 @@ module PlcAccess
         a << d.value
         d = d.next_device
       end
-      s = a.pack('n*').split("\x00").first
+      format = string_endian == :big ? 'n*' : 'v*'
+      s = a.pack(format).split("\x00").first
       s ? s[0, len] : ''
     end
 
     def set_text(value, len = 8)
       value = value[0, len]
       value << "\00" unless value.length.even?
-      a = value.unpack('n*')
+      format = string_endian == :big ? 'n*' : 'v*'
+      a = value.unpack(format)
       d = self
       a.each do |v|
         d.value = v

@@ -160,6 +160,10 @@ module PlcAccess
           end
         end
 
+        def string_endian
+          :little
+        end
+
         def device_by_name(name)
           case name
           when String

@@ -73,10 +73,17 @@ plc["DM0", 10] = [0, 1, 2, 3, 4].as_int  # => [0, 0, 1, 0, 2, 0, 3, 0, 4, 0]
 
 plc["MR0", 10].to_int # => [0, 1, 2, 3, 4]
 
-# Set string to data memory (ten wors from DM0) as ushort values.
-plc["DM0", 10] = "PLC Access".as_ushort()
-# Get string from data memory (ten wors from DM0).
-plc["DM0", 10].to_string()
+# Set string to data memory (ten words from DM0) as ushort values.
+# The byte order for string conversion differs by PLC type
+# (e.g., Mitsubishi uses little-endian, Keyence/Omron use big-endian).
+# Pass plc to automatically use the correct byte order.
+plc["DM0", 10] = "PLC Access".as_ushort(plc)
+# Get string from data memory (ten words from DM0).
+plc["DM0", 10].to_string(plc)
+
+# You can also specify the length and plc together.
+plc["DM0", 5] = "PLC Access".as_ushort(10, plc)
+plc["DM0", 5].to_string(10, plc)
 
 ```
 

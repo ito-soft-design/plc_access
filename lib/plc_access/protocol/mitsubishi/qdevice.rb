@@ -107,6 +107,10 @@ module PlcAccess
         def -(other)
           self.class.new suffix, [number - other, 0].max
         end
+
+        def string_endian
+          :little
+        end
       end
     end
   end

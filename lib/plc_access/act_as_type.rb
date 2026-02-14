@@ -43,8 +43,17 @@ module ActAsType
       pack("f*").unpack("S*")
     end
 
-    def to_string length=nil, encoding=Encoding::UTF_8
-      s = pack("v*")
+    def to_string length=nil, encoding=Encoding::UTF_8, endian: :little
+      if length.respond_to?(:string_endian)
+        endian = length.string_endian
+        length = nil
+      end
+      if encoding.respond_to?(:string_endian)
+        endian = encoding.string_endian
+        encoding = Encoding::UTF_8
+      end
+      format = endian == :big ? "n*" : "v*"
+      s = pack(format)
       if length
         s = s[0, length].delete("\000")
       end
@@ -55,10 +64,19 @@ module ActAsType
 
   refine String do
 
-    def as_ushort length=nil, encoding=Encoding::UTF_8
-      a = self.encode(encoding).unpack("v*")
+    def as_ushort length=nil, encoding=Encoding::UTF_8, endian: :little
+      if length.respond_to?(:string_endian)
+        endian = length.string_endian
+        length = nil
+      end
+      if encoding.respond_to?(:string_endian)
+        endian = encoding.string_endian
+        encoding = Encoding::UTF_8
+      end
+      format = endian == :big ? "n*" : "v*"
+      a = self.encode(encoding).unpack(format)
       return a unless length
-      
+
       s = (length + 1) / 2
       a += [0] * [s - a.length, 0].max
       a[0, s]

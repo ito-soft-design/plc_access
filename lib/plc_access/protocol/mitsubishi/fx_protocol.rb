@@ -170,6 +170,10 @@ module PlcAccess
           raise "ERROR: return #{res} for set_bits_to_device(#{words}, #{device.name})" unless res == ack_packet
         end
 
+        def string_endian
+          :little
+        end
+
         def device_by_name(name)
           case name
           when String

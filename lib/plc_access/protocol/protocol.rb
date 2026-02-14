@@ -58,6 +58,10 @@ module PlcAccess
 
       TIMEOUT = 1.0
 
+      def string_endian
+        :big
+      end
+
       # abstract methods
 
       def open; end
