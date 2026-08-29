@@ -53,7 +53,7 @@ module PlcAccess
       @value = 0
       case a
       when Integer
-        @suffix = ESC_SUFFIXES[a]
+        @suffix = self.class::ESC_SUFFIXES[a]
         @number = b
       when String, Symbol
         a = a.to_s # convert to string if it's a symbol
@@ -181,7 +181,7 @@ module PlcAccess
     end
 
     def device_code
-      ESC_SUFFIXES.index @suffix
+      self.class::ESC_SUFFIXES.index @suffix
     end
 
     def reset

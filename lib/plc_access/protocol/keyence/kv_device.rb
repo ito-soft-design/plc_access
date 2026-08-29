@@ -46,6 +46,7 @@ module PlcAccess
         SUFFIXES_FOR_DEC_HEX  = %w[R MR LR CR].freeze
         SUFFIXES_FOR_HEX      = %w[B VB W].freeze
         SUFFIXES_FOR_BIT      = %w[R B MR LR CR VB].freeze
+        ESC_SUFFIXES          = (SUFFIXES_FOR_DEC + SUFFIXES_FOR_DEC_HEX + SUFFIXES_FOR_HEX + SUFFIXES_FOR_BIT).uniq.freeze
 
         def suffixes_for_dec
           SUFFIXES_FOR_DEC

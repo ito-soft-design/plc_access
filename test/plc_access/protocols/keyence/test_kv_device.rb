@@ -58,4 +58,15 @@ class TestKvDevice < Test::Unit::TestCase
     assert_equal 0x80, d.number
     assert_equal 'B80', d.name
   end
+
+  def test_l_device_is_not_valid
+    d = KvDevice.new 'L0'
+    assert_nil d.name
+  end
+
+  def test_m_device_is_not_valid
+    d = KvDevice.new 'M0'
+    assert_nil d.name
+  end
+
 end
