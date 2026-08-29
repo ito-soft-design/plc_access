@@ -57,6 +57,7 @@ module PlcAccess
               @number = ::Regexp.last_match(2).to_i(p_adic_number)
             end
           end
+          raise ArgumentError, "Invalid device suffix: #{@suffix}" if @suffix && !SUFFIXES.include?(@suffix)
         end
 
         def valid?

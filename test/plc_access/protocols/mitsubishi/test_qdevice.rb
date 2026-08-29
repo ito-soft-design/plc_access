@@ -65,4 +65,8 @@ class TestQDevice < Test::Unit::TestCase
     d = QDevice.new 'sol'
     assert_equal false, d.valid?
   end
+
+  def test_invalid_suffix_raises_error
+    assert_raise(ArgumentError) { QDevice.new 'XX', 0 }
+  end
 end

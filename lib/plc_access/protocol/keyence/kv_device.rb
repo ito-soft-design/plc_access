@@ -30,6 +30,7 @@ module PlcAccess
         def initialize(a, b = nil)
           super
           @suffix = 'R' if @suffix.nil? || @suffix.length.zero?
+          raise ArgumentError, "Invalid device suffix: #{@suffix}" unless ESC_SUFFIXES.include?(@suffix)
         end
 
         def +(other)

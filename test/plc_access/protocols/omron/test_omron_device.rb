@@ -149,4 +149,8 @@ class TestOmronDevice < Test::Unit::TestCase
     d = OmronDevice.new '0.0'
     assert_equal '0', d.channel_device.name
   end
+
+  def test_invalid_suffix_raises_error
+    assert_raise(ArgumentError) { OmronDevice.new 'X', 0 }
+  end
 end

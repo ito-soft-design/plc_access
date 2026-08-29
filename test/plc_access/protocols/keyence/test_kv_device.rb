@@ -60,13 +60,11 @@ class TestKvDevice < Test::Unit::TestCase
   end
 
   def test_l_device_is_not_valid
-    d = KvDevice.new 'L0'
-    assert_nil d.name
+    assert_raise(ArgumentError) { KvDevice.new 'L0' }
   end
 
   def test_m_device_is_not_valid
-    d = KvDevice.new 'M0'
-    assert_nil d.name
+    assert_raise(ArgumentError) { KvDevice.new 'M0' }
   end
 
 end

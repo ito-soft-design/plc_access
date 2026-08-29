@@ -52,6 +52,7 @@ module PlcAccess
               @bit = ::Regexp.last_match(4).to_i if ::Regexp.last_match(4)
             end
           end
+          raise ArgumentError, "Invalid device suffix: #{@suffix}" if @suffix && !SUFFIXES.include?(@suffix)
           case @suffix
           when 'T', 'C'
             raise "#{name} is not allowed as a bit device." if @bit
